@@ -3,7 +3,6 @@
     /*
      * This is the test file for Course.Class.php
      */
-    
     echo 'Testing LessonTime and Lesson Class. ';
     $time1 = new LessonTime(1, 1, 830, 930);
     $lesson1 = new Lesson('Lec', 'FS2', $time1, 'LT2A', 'This is a test lesson1.');
@@ -27,5 +26,15 @@
     echo $course->toString();
     echo '<hr>';
     
-    echo analyse('CZ2001', 10224);
+    /*
+     * Testing analyse function;
+     */
+    $testCode = 'CZ2001';
+    $testIndex = 10733;
+    $wrongIndex = 12312;
+    if(analyse($testCode, $wrongIndex)==null)
+	echo 'Wrong Index Catched';
+    echo '</br>';
+    echo analyse($testCode, $testIndex)->toString();
+    echo '<hr>';
 ?>

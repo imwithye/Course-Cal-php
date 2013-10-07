@@ -1,6 +1,7 @@
 <?php
 
     require_once 'network.php';
+    require_once 'time.php';
     require_once 'libs/simple_html_dom.php';
     /*
      * Define Lesson and Course Class.
@@ -178,7 +179,8 @@
             $var .= "Code: ".$this->getCode()." ";
             $var .= "Index: ".$this->getIndex()." ";
             $var .= "Name: ".$this->getName()." ";
-            $var .= "ExamTime: ".$this->getExamTime()->toString()." </br>";
+	    $var .= "AU: ".$this->getAU()." ";
+            //$var .= "ExamTime: ".$this->getExamTime()->toString()." </br>";
             $var .= "Lessons: </br>";
             $count = count($this->getLessons());
             for($i=0;$i<$count;$i++){
@@ -201,10 +203,40 @@
 
         //Get Index Block
         $indexBlock = null;
-        foreach (str_get_html($table[1])->find('tr') as $trBlock)
-            foreach(str_get_html ($trBlock)->find('b') as $firstCol)
-                if($index==$firstCol->plaintext)
-                    $indexBlock = $trBlock;
-        return $indexBlock;
+	$line = -1;
+	$trBlocks = str_get_html($table[1])->find('tr');
+        for($i=0;$i<count($trBlocks);$i++){
+	    $cols = str_get_html ($trBlocks[$i])->find('b');
+	    for($j=0;$j<count($cols);$j++)
+		if($index==$cols[0]->plaintext){
+		    $indexBlock = $trBlocks[$i];
+		    $line = $i;
+		    break;
+		}
+            if($line!=-1)
+                break;
+        }
+        if($line==-1)
+            return null;
+        
+        $course = new Course($code, $index);
+	$course->setName($courseName->plaintext);
+	$course->setAU($courseAU->plaintext);
+        $trs = array();
+        array_push($trs, $trBlocks[$line]);
+        $line++;
+        while($line<count($trBlocks) && str_get_html($trBlocks[$line])->find('b')[0]->plaintext==""){
+            array_push($trs, $trBlocks[$line]);
+            $line++;
+        }
+        foreach ($trs as $value) {
+            $lessonInfo = str_get_html($value)->find('b');
+            $times = explode('-',$lessonInfo[4]->plaintext);
+            $lessonTime = new LessonTime(week($lessonInfo[3]->plaintext), 0, intval($times[0]), intval($times[1]));
+            $lesson = new Lesson($lessonInfo[1]->plaintext, $lessonInfo[2]->plaintext, $lessonTime, $lessonInfo[5]->plaintext, $lessonInfo[6]->plaintext);
+            $course->addLesson($lesson);
+        }
+        
+        return $course;
     }
 ?>
