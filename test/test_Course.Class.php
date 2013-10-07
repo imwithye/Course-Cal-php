@@ -26,4 +26,6 @@
     echo '</br>';
     echo $course->toString();
     echo '<hr>';
+    
+    echo analyse('CZ2001', 10224);
 ?>

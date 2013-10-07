@@ -1,4 +1,7 @@
 <?php
+
+    require_once 'network.php';
+    require_once 'libs/simple_html_dom.php';
     /*
      * Define Lesson and Course Class.
      */
@@ -120,6 +123,7 @@
         private $code;
         private $index;
         private $name;
+        private $au;
         private $examTime;
         private $lessons;
         
@@ -143,6 +147,14 @@
         
         public function getName(){
             return $this->name;
+        }
+        
+        public function setAU($au){
+            $this->au = $au;
+        }
+        
+        public function getAU(){
+            return $this->au;
         }
 
         public function setExamTime(ExamTime $examTime){
@@ -174,5 +186,25 @@
             }
             return $var;
         }
+    }
+    
+    function analyse($code, $index){
+        //Get Course Data from Course Page;
+        $htmlAllData = fetch(courseURL($code));
+        $html = str_get_html($htmlAllData);
+        $table = $html->find('table');
+        
+        //Get Course Information
+        $InfoBlock = str_get_html(str_get_html($table[0])->find('tr')[0]);
+        $courseName = $InfoBlock->find('b')[1];
+        $courseAU = $InfoBlock->find('b')[2];
+
+        //Get Index Block
+        $indexBlock = null;
+        foreach (str_get_html($table[1])->find('tr') as $trBlock)
+            foreach(str_get_html ($trBlock)->find('b') as $firstCol)
+                if($index==$firstCol->plaintext)
+                    $indexBlock = $trBlock;
+        return $indexBlock;
     }
 ?>
