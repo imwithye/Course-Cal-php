@@ -34,6 +34,6 @@
     /* -----------------------END URL FUNCTIONS--------------------------*/
 
     function fetch($url){
-        return file_get_contents($url);
+        return preg_replace("/\n/","",strtolower(file_get_contents($url)));
     }
 ?>
