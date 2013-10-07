@@ -2,6 +2,8 @@
     /*
      * author Ciel
      */
+     
+     /* ---------------------------URL FUNCTIONS--------------------------*/
     function courseURL($code){
         $y = date("Y");
         $m = date("m");
@@ -14,7 +16,7 @@
         }else{
             $sem = 1;
         }
-        $url = "https://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.";
+        $url = "http://wish.wis.ntu.edu.sg/webexe/owa/AUS_SCHEDULE.";
         $url .= "main_display1?staff_access=false&acadsem=".$y.";".$sem;
         $url .= "&r_subj_code=".strtoupper($code)."&boption=Search&r_search_type=F";
         return $url;
@@ -28,5 +30,10 @@
         $url = "http://www.ntu.edu.sg/Students/Undergraduate/AcademicServices/AcademicCalendar/Pages/";
         $url .= $y."-".($y%100+1).".aspx";
         return $url;
+    }
+    /* -----------------------END URL FUNCTIONS--------------------------*/
+
+    function fetch($url){
+        return file_get_contents($url);
     }
 ?>
