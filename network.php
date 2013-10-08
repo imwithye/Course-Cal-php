@@ -1,8 +1,4 @@
 <?php
-    /*
-     * author Ciel
-     */
-     
      /* ---------------------------URL FUNCTIONS--------------------------*/
     function courseURL($code){
         $y = date("Y");

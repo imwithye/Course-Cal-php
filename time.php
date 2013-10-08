@@ -1,31 +1,15 @@
-<?php
-
+<?php  
     class Time{
-        protected $startTime;
-        protected $endTime;
+        protected $year;
+        protected $month;
+        protected $day;
         
-        public function getStartTime(){
-            return $this->startTime;
-        }
-        
-        public function getEndTime(){
-            return $this->endTime;
-        }
-    }
-    
-    class ExamTime extends Time{
-        private $year;
-        private $month;
-        private $day;
-        
-        public function __construct($year, $month, $day, $startTime, $endTime) {
+        public function __construct($year, $month, $day) {
             $this->year = $year;
             $this->month = $month;
             $this->day = $day;
-            $this->startTime = $startTime;
-            $this->endTime = $endTime;
         }
-        
+                       
         public function getYear(){
             return $this->year;
         }
@@ -39,32 +23,20 @@
         }
         
         public function toString(){
-            return "Exam at ".$this->getDay()."/".$this->getMonth()."/".$this->getYear()." Starting at ".$this->getStartTime()." Ending at ".$this->getEndTime();
+            return $this->day.'/'.$this->month.'/'.$this->year;
         }
     }
     
-    class LessonTime extends Time{
-        private $day;
-        private $weekRepeat;
+    class EventTime extends Time{
+        protected $startTime;
+        protected $endTime;
         
-        public function __construct($day, $weekRepeat, $startTime, $endTime){
-            $this->day = $day;
-            $this->weekRepeat = $weekRepeat;
-            $this->startTime = $startTime;
-            $this->endTime = $endTime;
+        public function getStartTime(){
+            return $this->startTime;
         }
         
-        public function getDay(){
-            return $this->day;
-        }
-        
-        public function getWeekRepeat(){
-            return $this->weekRepeat;
-        }
-        
-        public function toString(){
-           return "Starting at ".$this->getStartTime()." Ending at 
-                        ".$this->getEndTime()." on Weekday ".$this->getDay()." with Repeat ".$this->getWeekRepeat();
+        public function getEndTime(){
+            return $this->endTime;
         }
     }
     

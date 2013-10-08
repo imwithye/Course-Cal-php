@@ -1,11 +1,49 @@
 <?php
-
     require_once 'network.php';
     require_once 'time.php';
     require_once 'libs/simple_html_dom.php';
     /*
      * Define Lesson and Course Class.
-     */    
+     */   
+    class ExamTime extends EventTime{              
+        public function __construct($year, $month, $day, $startTime, $endTime) {
+            $this->year = $year;
+            $this->month = $month;
+            $this->day = $day;
+            $this->startTime = $startTime;
+            $this->endTime = $endTime;
+        }
+        
+        public function toString(){
+            return "Exam at ".$this->day."/".$this->month."/".$this->year." Starting at ".$this->startTime." Ending at ".$this->endTime;
+        }
+    }
+    
+    class LessonTime extends EventTime{
+        private $wkday;
+        private $weekRepeat;
+        
+        public function __construct($day, $weekRepeat, $startTime, $endTime){
+            $this->wkday = $day;
+            $this->weekRepeat = $weekRepeat;
+            $this->startTime = $startTime;
+            $this->endTime = $endTime;
+        }
+        
+        public function getWkDay(){
+            return $this->wkday;
+        }
+        
+        public function getWeekRepeat(){
+            return $this->weekRepeat;
+        }
+        
+        public function toString(){
+           return "Starting at ".$this->startTime." Ending at 
+                        ".$this->endTime." on Weekday ".$this->wkday." with Repeat ".$this->weekRepeat;
+        }
+    }
+    
     class Lesson{
         private $type;
         private $group;
