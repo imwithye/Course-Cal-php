@@ -34,6 +34,7 @@
     /* -----------------------END URL FUNCTIONS--------------------------*/
 
     function fetch($url){
+        $url = preg_replace('/https/','http',$url);
         return preg_replace("/\n/","",strtolower(file_get_contents($url)));
     }
 ?>

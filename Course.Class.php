@@ -132,6 +132,7 @@
             $this->code = $code;
             $this->index = $index;
             $this->lessons = array();
+            $this->examTime = null;
         }
         
         public function getCode(){
@@ -180,7 +181,8 @@
             $var .= "Index: ".$this->getIndex()." ";
             $var .= "Name: ".$this->getName()." ";
 	    $var .= "AU: ".$this->getAU()." ";
-            //$var .= "ExamTime: ".$this->getExamTime()->toString()." </br>";
+            if($this->getExamTime()!=null)
+                $var .= "ExamTime: ".$this->getExamTime()->toString()." </br>";
             $var .= "Lessons: </br>";
             $count = count($this->getLessons());
             for($i=0;$i<$count;$i++){
@@ -190,7 +192,8 @@
         }
     }
     
-    function analyse($code, $index){
+    function analyseCoursePage($code, $index){
+        $code = strtoupper($code);
         //Get Course Data from Course Page;
         $htmlAllData = fetch(courseURL($code));
         $html = str_get_html($htmlAllData);
@@ -238,5 +241,32 @@
         }
         
         return $course;
+    }
+    
+    function analysePrintablePage($url){
+        $html = str_get_html(fetch($url));
+        $courses = array();
+        $table = str_get_html(str_get_html($html->find('table')[0])->find('table')[2]);
+        $trBlocks = $table->find('tr');
+        $numbersOfBlocks = count($trBlocks);
+        for($i=1;$i<$numbersOfBlocks-1;$i++){
+            $tds = str_get_html($trBlocks[$i])->find('td');
+            $index = intval($tds[0]->plaintext);
+            $code = $tds[1]->plaintext;
+            $course = analyseCoursePage($code, $index);
+            if($course!=null){
+                if(preg_replace('/\s/', '', $tds[4]->plaintext)=='-')
+                    array_push($courses, $course);
+                else{
+                    $examSchedule = explode(' ', $tds[4]->plaintext);
+                    $first = explode('-', $examSchedule[0]);
+                    $second = explode('-', $examSchedule[1]);
+                    $examTime = new ExamTime(2000+intval($first[2]), month($first[1]), intval($first[0]), intval($second[0]), intval($second[1]));
+                    $course->setExamTime($examTime);
+                    array_push($courses, $course);
+                }
+            }
+        }
+        return $courses;
     }
 ?>
