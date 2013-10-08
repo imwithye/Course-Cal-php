@@ -5,75 +5,7 @@
     require_once 'libs/simple_html_dom.php';
     /*
      * Define Lesson and Course Class.
-     */
-    class Time{
-        protected $startTime;
-        protected $endTime;
-        
-        public function getStartTime(){
-            return $this->startTime;
-        }
-        
-        public function getEndTime(){
-            return $this->endTime;
-        }
-    }
-    
-    class ExamTime extends Time{
-        private $year;
-        private $month;
-        private $day;
-        
-        public function __construct($year, $month, $day, $startTime, $endTime) {
-            $this->year = $year;
-            $this->month = $month;
-            $this->day = $day;
-            $this->startTime = $startTime;
-            $this->endTime = $endTime;
-        }
-        
-        public function getYear(){
-            return $this->year;
-        }
-        
-        public function getMonth(){
-            return $this->month;
-        }
-        
-        public function getDay(){
-            return $this->day;
-        }
-        
-        public function toString(){
-            return "Exam at ".$this->getDay()."/".$this->getMonth()."/".$this->getYear()." Starting at ".$this->getStartTime()." Ending at ".$this->getEndTime();
-        }
-    }
-    
-    class LessonTime extends Time{
-        private $day;
-        private $weekRepeat;
-        
-        public function __construct($day, $weekRepeat, $startTime, $endTime){
-            $this->day = $day;
-            $this->weekRepeat = $weekRepeat;
-            $this->startTime = $startTime;
-            $this->endTime = $endTime;
-        }
-        
-        public function getDay(){
-            return $this->day;
-        }
-        
-        public function getWeekRepeat(){
-            return $this->weekRepeat;
-        }
-        
-        public function toString(){
-           return "Starting at ".$this->getStartTime()." Ending at 
-                        ".$this->getEndTime()." on Weekday ".$this->getDay()." with Repeat ".$this->getWeekRepeat();
-        }
-    }
-    
+     */    
     class Lesson{
         private $type;
         private $group;
@@ -82,10 +14,10 @@
         private $remark;
         
         public function __construct($type, $group, LessonTime $time, $venue, $remark) {
-            $this->type = $type;
-            $this->group = $group;
+            $this->type = strtoupper($type);
+            $this->group = strtoupper($group);
             $this->time = $time;
-            $this->venue = $venue;
+            $this->venue = strtoupper($venue);
             $this->remark = $remark;
         }
         
@@ -144,7 +76,7 @@
         }
         
         public function setName($name){
-            $this->name = $name;
+            $this->name = ucwords($name);
         }
         
         public function getName(){
