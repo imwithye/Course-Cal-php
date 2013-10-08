@@ -1,5 +1,5 @@
 <?php
-    require_once 'Course.Class.php';
+    include_once '../Course.Class.php';
     $url = $_REQUEST['url'];
     $courses = analysePrintablePage($url);
     echo 'Testing receive url from _REQUEST</br>';
