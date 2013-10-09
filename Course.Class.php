@@ -28,19 +28,32 @@
             $this->weekRepeat = $weekRepeat;
             $this->startTime = $startTime;
             $this->endTime = $endTime;
+            $this->weekRepeat = array(FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE);
         }
         
         public function getWkDay(){
             return $this->wkday;
         }
         
+        public function setWkRepeatTrueforThisWk($wk){
+            $this->weekRepeat[$wk] = TRUE;
+        }
+
         public function getWeekRepeat(){
             return $this->weekRepeat;
         }
         
         public function toString(){
-           return "Starting at ".$this->startTime." Ending at 
-                        ".$this->endTime." on Weekday ".$this->wkday." with Repeat ".$this->weekRepeat;
+           $var = "Starting at ".$this->startTime." Ending at 
+                        ".$this->endTime." on Weekday ".$this->wkday." with Repeat: </br>";
+           foreach ($this->weekRepeat as $wk){
+               if($wk)
+                   $var .= 'TRUE ';
+               else
+                   $var .= 'FALSE ';
+           }
+           $var .= '</br>';
+           return $var;
         }
     }
     
@@ -50,6 +63,7 @@
         private $time;
         private $venue;
         private $remark;
+        private $wkRepeatValid;
         
         public function __construct($type, $group, LessonTime $time, $venue, $remark) {
             $this->type = strtoupper($type);
@@ -57,6 +71,7 @@
             $this->time = $time;
             $this->venue = strtoupper($venue);
             $this->remark = $remark;
+            $this->wkRepeatValid = $this->setWkRepeat();
         }
         
         public function getType(){
@@ -78,14 +93,48 @@
         public function getRemark(){
             return $this->remark;
         }
+        
+        public function getWkRepeatValid(){
+            return $this->wkRepeatValid;
+        }
+        
+        private function setWkRepeat(){
+            $re = $this->remark;
+            if($re==''){
+                for($i=0;$i<13;$i++)
+                    $this->time->setWkRepeatTrueforThisWk($i);
+                return TRUE;
+            }
+            strtolower($re);
+            $re1 = preg_replace('/wk/', '', $re);
+            $re2 = preg_replace('/\s/', '', $re1);
+            $wks = explode(',', $re2);
+            foreach($wks as $wk){
+                $wkTime = explode('-', $wk);
+                if(is_numeric($wk))
+                    $this->time->setWkRepeatTrueforThisWk ($wk-1);
+                else if(count($wkTime)==2){
+                    for($i=$wkTime[0]-1;$i<$wkTime[1];$i++)
+                        $this->time->setWkRepeatTrueforThisWk ($i);
+                }
+                else{
+                    $this->time->setWkRepeatTrueforThisWk(0);
+                    return FALSE;
+                }
+            }
+            return TRUE;
+        }
 
         public function toString(){
             $var = "Lesson, ";
             $var .= "Type: ".$this->getType()." ";
-            $var .= "Group: ".$this->getGroup()." ";
-            $var .= "Time: ".$this->getTime()->toString()." ";
+            $var .= "Group: ".$this->getGroup()." ";           
             $var .= "Venue: ".$this->getVenue()." ";
-            $var .= "Remark: ".$this->getRemark();
+            $var .= "Remark: ".$this->getRemark().' ';
+            if($this->wkRepeatValid)
+                $var .= "Time: ".$this->getTime()->toString();
+            else
+                $var .= "This lesson wkRepeat info cannot be caught. Only set Wk1.";
             return $var;
         }
     }
@@ -144,7 +193,7 @@
         public function getLessons(){
             return $this->lessons;
         }
-        
+
         public function toString(){
             $var = "Course, ";
             $var .= "Code: ".$this->getCode()." ";
