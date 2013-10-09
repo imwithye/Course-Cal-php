@@ -162,10 +162,10 @@
         }
     }
     
-    function analyseCoursePage($code, $index){
+    function analyseCoursePage($code, $index, array $info){
         $code = strtoupper($code);
         //Get Course Data from Course Page;
-        $htmlAllData = fetch(courseURL($code));
+        $htmlAllData = fetch(courseURL($code, $info));
         $html = str_get_html($htmlAllData);
         $table = $html->find('table');
         
@@ -213,7 +213,7 @@
         return $course;
     }
     
-    function analysePrintablePage($url){
+    function analysePrintablePage($url, array $info){
         $html = str_get_html(fetch($url));
         $courses = array();
         $table = str_get_html(str_get_html($html->find('table')[0])->find('table')[2]);
@@ -223,7 +223,7 @@
             $tds = str_get_html($trBlocks[$i])->find('td');
             $index = intval($tds[0]->plaintext);
             $code = $tds[1]->plaintext;
-            $course = analyseCoursePage($code, $index);
+            $course = analyseCoursePage($code, $index, $info);
             if($course!=null){
                 if(preg_replace('/\s/', '', $tds[4]->plaintext)=='-')
                     array_push($courses, $course);
