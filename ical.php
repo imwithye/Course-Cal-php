@@ -7,8 +7,12 @@
         $startTime = semInfo($info['year'], $info['sem']);
         $lessons = (Array)$course->getLessons();
         foreach ($lessons as $lesson) {
-            //set start and end time.
             $lessonEvent = & $ical->newComponent('vevent');
+            //set summary(name)
+            $summary = $course->getCode().' ';
+            $summary .= $lesson->getType();
+            $lessonEvent->setProperty( "summary", $summary );
+            //set start and end time. 
             $start = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
             $start['hour'] = intval($lesson->getTime()->getStartTime())/100;
             $start['min'] = intval($lesson->getTime()->getStartTime())%100;
@@ -22,8 +26,8 @@
             //set location
             $lessonEvent->setProperty( "LOCATION", $lesson->getVenue());
             //set description
-            $description = $course->getCode().' ';
-            $description .= $course->getName().' ';
+            $description = $course->getCode().', ';
+            $description .= $course->getName().', ';
             $description .= $course->getAU().'\nRemark: ';
             $description .= $lesson->getRemark();
             $lessonEvent->setProperty( "description", $description);   
