@@ -6,6 +6,7 @@
     function setCourseEvent(Course $course, vcalendar $ical, $info){
         $startTime = semInfo($info['year'], $info['sem']);
         $lessons = (Array)$course->getLessons();
+        //add lessons
         foreach ($lessons as $lesson) {
             if(!$lesson->getWkRepeatValid()){
                 $course->setErrorFlag();   //an Error found for this course;
@@ -71,8 +72,31 @@
                     array_push($exdates, $w);
                 }
             }
-            $lessonEvent->setProperty("exdate", $exdates, array('TZID'=>$info['tz'])); //skip recess;
+            $lessonEvent->setProperty("exdate", $exdates, array('TZID'=>$info['tz']));
         }
+        
+        //add examtime
+        $examtime = $course->getExamTime();
+        if($examtime==null)
+            return;
+        $start = array('year' => $examtime->getYear()
+                    , 'month' => $examtime->getMonth()
+                    , 'day' => $examtime->getDay()
+                    , 'hour' => intval($examtime->getStartTime())/100
+                    , 'min' => intval($examtime->getStartTime())%100
+                    , 'sec' => 0);
+        $end = array('year' => $examtime->getYear()
+                    , 'month' => $examtime->getMonth()
+                    , 'day' => $examtime->getDay()
+                    , 'hour' => intval($examtime->getEndTime())/100
+                    , 'min' => intval($examtime->getEndTime())%100
+                    , 'sec' => 0);
+        $exam = & $ical->newComponent('vevent');
+        $exam->setProperty( "dtstart", $start );
+        $exam->setProperty( "dtend", $end );
+        $exam->setProperty( "summary", $course->getCode().' EXAM!' );
+        $exam->setProperty( "description", $course->getCode().', '.$course->getName().', '.$course->getAU());
+        return;
     }
     
     function createCal($url){
