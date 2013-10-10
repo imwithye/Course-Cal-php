@@ -23,9 +23,8 @@
         private $wkday;
         private $weekRepeat;
         
-        public function __construct($day, $weekRepeat, $startTime, $endTime){
+        public function __construct($day, $startTime, $endTime){
             $this->wkday = $day;
-            $this->weekRepeat = $weekRepeat;
             $this->startTime = $startTime;
             $this->endTime = $endTime;
             $this->weekRepeat = array(FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE);
@@ -254,7 +253,7 @@
         foreach ($trs as $value) {
             $lessonInfo = str_get_html($value)->find('b');
             $times = explode('-',$lessonInfo[4]->plaintext);
-            $lessonTime = new LessonTime(week($lessonInfo[3]->plaintext), 0, intval($times[0]), intval($times[1]));
+            $lessonTime = new LessonTime(week($lessonInfo[3]->plaintext), intval($times[0]), intval($times[1]));
             $lesson = new Lesson($lessonInfo[1]->plaintext, $lessonInfo[2]->plaintext, $lessonTime, $lessonInfo[5]->plaintext, $lessonInfo[6]->plaintext);
             $course->addLesson($lesson);
         }
