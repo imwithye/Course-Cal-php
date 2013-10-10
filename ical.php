@@ -17,13 +17,17 @@
             $lessonEvent->setProperty( "summary", $summary );
             //set start and end time. 
             $start = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
-            $start['hour'] = intval($lesson->getTime()->getStartTime())/100;
-            $start['min'] = intval($lesson->getTime()->getStartTime())%100;
+            $shour = intval($lesson->getTime()->getStartTime())/100;
+            $smin = intval($lesson->getTime()->getStartTime())%100;
+            $start['hour'] = $shour;
+            $start['min'] = $smin;
             $start['sec'] = 0;
             $lessonEvent->setProperty( "dtstart", $start );
             $end = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
-            $end['hour'] = intval($lesson->getTime()->getEndTime())/100;
-            $end['min'] = intval($lesson->getTime()->getEndTime())%100;
+            $ehour = intval($lesson->getTime()->getEndTime())/100;
+            $emin = intval($lesson->getTime()->getEndTime())%100;
+            $end['hour'] = $ehour;
+            $end['min'] = $emin;
             $end['sec'] = 0;
             $lessonEvent->setProperty( "dtend", $end );          
             //set location
@@ -44,11 +48,18 @@
             $rule = array('FREQ' => 'WEEKLY'
                     , 'UNTIL' => $endTime['year'].'/'.$endTime['month'].'/'.$endTime['day']);
             $lessonEvent->setProperty("rrule", $rule);
+            $exdate = array('year' => $start['year']
+                        , 'month' => $start['month']
+                        , 'day' => $start['day']);
+            $recess = fewDaysNextOrBefore($exdate, '+7 weeks');
+            $recess['hour'] = $shour;
+            $recess['min'] = $smin;
+            $recess['sec'] = 0;
+            $lessonEvent->setProperty("exdate", array($recess), array('TZID'=>$info['tz'])); //skip recess;
         }
     }
     
     function createCal($url){
-        $tz = 'Asia/Singapore';//define the time zone
         $info = getUserInfo($url);
         if($info==null)
             return null;
@@ -56,7 +67,7 @@
         if(count($courses)==0)
             return null;
         $config = array('unique_id' => $info['p1']
-                    , 'TZID' => $tz
+                    , 'TZID' => $info['tz']
                     , 'filename' => $info['p1']);
         $ical = new vcalendar($config);
         foreach($courses as $course){

@@ -33,7 +33,8 @@
                     , 'p1' => $p1
                     , 'p2' => $p2
                     , 'year' => $year
-                    , 'sem' => $sem);
+                    , 'sem' => $sem
+                    , 'tz' => 'Asia/Singapore');
         return $info;
     }
     
