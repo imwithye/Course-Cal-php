@@ -7,6 +7,9 @@
         $startTime = semInfo($info['year'], $info['sem']);
         $lessons = (Array)$course->getLessons();
         foreach ($lessons as $lesson) {
+            if(!$lesson->getWkRepeatValid()){
+                $course->setErrorFlag();   //an Error found for this course;
+            }     
             $lessonEvent = & $ical->newComponent('vevent');
             //set summary(name)
             $summary = $course->getCode().' ';
@@ -33,7 +36,14 @@
                 $description .= 'Group: '.$lesson->getGroup().', ';
             if($lesson->getRemark()!=null)
                 $description .= 'Remark: '.$lesson->getRemark();
-            $lessonEvent->setProperty( "description", $description);   
+            $lessonEvent->setProperty( "description", $description);
+            //set week repeat
+            if(!$lesson->getWkRepeatValid())
+                continue;
+            $endTime = fewDaysNextOrBefore($startTime, '+14 weeks');
+            $rule = array('FREQ' => 'WEEKLY'
+                    , 'UNTIL' => $endTime['year'].'/'.$endTime['month'].'/'.$endTime['day']);
+            $lessonEvent->setProperty("rrule", $rule);
         }
     }
     

@@ -145,12 +145,14 @@
         private $au;
         private $examTime;
         private $lessons;
+        private $errorFlag;
         
         public function __construct($code, $index) {
             $this->code = $code;
             $this->index = $index;
             $this->lessons = array();
             $this->examTime = null;
+            $this->errorFlag = 0;
         }
         
         public function getCode(){
@@ -191,6 +193,14 @@
         
         public function getLessons(){
             return $this->lessons;
+        }
+        
+        public function setErrorFlag(){
+            $this->errorFlag++;
+        }
+        
+        public function getErrorFlag(){
+            return $this->errorFlag;
         }
 
         public function toString(){
