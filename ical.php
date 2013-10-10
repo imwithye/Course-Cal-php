@@ -5,7 +5,29 @@
     
     function setCourseEvent(Course $course, vcalendar $ical, $info){
         $startTime = semInfo($info['year'], $info['sem']);
-        return $startTime;  //This is for testing.
+        $lessons = (Array)$course->getLessons();
+        foreach ($lessons as $lesson) {
+            //set start and end time.
+            $lessonEvent = & $ical->newComponent('vevent');
+            $start = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
+            $start['hour'] = intval($lesson->getTime()->getStartTime())/100;
+            $start['min'] = intval($lesson->getTime()->getStartTime())%100;
+            $start['sec'] = 0;
+            $lessonEvent->setProperty( "dtstart", $start );
+            $end = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
+            $end['hour'] = intval($lesson->getTime()->getEndTime())/100;
+            $end['min'] = intval($lesson->getTime()->getEndTime())%100;
+            $end['sec'] = 0;
+            $lessonEvent->setProperty( "dtend", $end );          
+            //set location
+            $lessonEvent->setProperty( "LOCATION", $lesson->getVenue());
+            //set description
+            $description = $course->getCode().' ';
+            $description .= $course->getName().' ';
+            $description .= $course->getAU().'\nRemark: ';
+            $description .= $lesson->getRemark();
+            $lessonEvent->setProperty( "description", $description);   
+        }
     }
     
     function createCal($url){
