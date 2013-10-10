@@ -40,6 +40,21 @@
         }
     }
     
+    function semInfo($year, $sem){
+        $data = array('2013' => array('1' => 120813
+                                        ,'2' => 130114)
+                    , '2014' => array('1' => 110814
+                                    , '2' => 120115)
+                    , '2015' => array('1' => 100815
+                                    , '2' => 110116)
+                    , '2016' => array('1' => 080816
+                                    , '2' => 090117));
+        $SemTime = $data[strval($year)][strval($sem)];
+        return array('year' => intval($SemTime%100+2000)
+                        , 'month' => intval(($SemTime/100)%100)
+                        , 'day' => intval($SemTime/10000));
+    }
+    
     function month($month){
         if($month=='jan')
             return 1;
@@ -86,5 +101,16 @@
             return 6;
         else
             return 0;
+    }
+    
+    function fewDaysNextOrBefore($time, $n){
+        $year = $time['year'];
+        $month = $time['month'];
+        $day = $time['day'];
+        $Date = strtotime($year.'-'.$month.'-'.$day);
+        $newDate = explode('/',date('n/j/Y', strtotime($n, $Date)));
+        return array('year' => intval($newDate[2])
+                    ,'month' => intval($newDate[1])
+                    ,'day' => intval($newDate[0]));
     }
 ?>
