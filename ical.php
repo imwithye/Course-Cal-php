@@ -113,6 +113,6 @@
         foreach($courses as $course){
             setCourseEvent($course, $ical, $info);
         }
-        return $ical;
+        return array('ics'=>$ical, 'course'=>$courses);
     }
 ?>

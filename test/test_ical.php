@@ -6,5 +6,5 @@
     if($v==null)
         echo 'Error';
     else
-        $v->returnCalendar();
+        $v['ics']->returnCalendar();
 ?>
