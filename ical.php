@@ -108,7 +108,7 @@
             return null;
         $config = array('unique_id' => $info['p1']
                     , 'TZID' => $info['tz']
-                    , 'filename' => 'Course-'.$info['p1']);
+                    , 'filename' => 'AY'.$info['year'].'-'.($info['year']+1).'-Sem-'.$info['sem']);
         $ical = new vcalendar($config);
         foreach($courses as $course){
             setCourseEvent($course, $ical, $info);
