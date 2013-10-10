@@ -55,7 +55,23 @@
             $recess['hour'] = $shour;
             $recess['min'] = $smin;
             $recess['sec'] = 0;
-            $lessonEvent->setProperty("exdate", array($recess), array('TZID'=>$info['tz'])); //skip recess;
+            $wk = $lesson->getTime()->getWeekRepeat();
+            $exdates = array();
+            array_push($exdates, $recess);
+            for($i=0;$i<13;$i++){
+                if($i<7)
+                    $j = $i;
+                else
+                    $j = $i+1;
+                if(!$wk[$i]){
+                    $w = fewDaysNextOrBefore($exdate, '+'.$j.' weeks');
+                    $w['hour'] = $shour;
+                    $w['min'] = $smin;
+                    $w['sec'] = 0;
+                    array_push($exdates, $w);
+                }
+            }
+            $lessonEvent->setProperty("exdate", $exdates, array('TZID'=>$info['tz'])); //skip recess;
         }
     }
     
@@ -68,7 +84,7 @@
             return null;
         $config = array('unique_id' => $info['p1']
                     , 'TZID' => $info['tz']
-                    , 'filename' => $info['p1']);
+                    , 'filename' => 'Course-'.$info['p1']);
         $ical = new vcalendar($config);
         foreach($courses as $course){
             setCourseEvent($course, $ical, $info);
