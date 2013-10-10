@@ -28,8 +28,11 @@
             //set description
             $description = $course->getCode().', ';
             $description .= $course->getName().', ';
-            $description .= $course->getAU().'\nRemark: ';
-            $description .= $lesson->getRemark();
+            $description .= $course->getAU().'\n';
+            if($lesson->getGroup()!=null)
+                $description .= 'Group: '.$lesson->getGroup().', ';
+            if($lesson->getRemark()!=null)
+                $description .= 'Remark: '.$lesson->getRemark();
             $lessonEvent->setProperty( "description", $description);   
         }
     }

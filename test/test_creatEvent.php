@@ -4,7 +4,7 @@
     
     //setting a test course;
     $time1 = new LessonTime(1, 830, 930);
-    $lesson1 = new Lesson('Lec', 'FS2', $time1, 'LT2A', 'This is a test lesson1.');
+    $lesson1 = new Lesson('Lec', '', $time1, 'LT2A', '');
     $time2 = new LessonTime(1, 930, 1030);
     $lesson2 = new Lesson('TUT', 'FS2', $time2, 'TR89', 'This is a test lesson2.');
     

@@ -8,7 +8,7 @@
         $url .= "&r_subj_code=".strtoupper($code)."&boption=Search&r_search_type=F";
         return $url;
     }
-    
+      
     /* -----------------------END URL FUNCTIONS--------------------------*/
 
     function getUserInfo($url){
@@ -29,7 +29,8 @@
         if(count($matches)!=1)
             return null;
         $sem = $matches[0];
-        $info = array('p1' => $p1
+        $info = array('url' => urldecode($url)
+                    , 'p1' => $p1
                     , 'p2' => $p2
                     , 'year' => $year
                     , 'sem' => $sem);
