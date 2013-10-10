@@ -15,7 +15,7 @@
         if(count($errorWithRepeat)==0)
             $result['ics']->returnCalendar();
         else{
-            //Go to Error Page;
+            echo 'Course WkRepeatError';
         }
     }
 ?>
