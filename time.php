@@ -110,7 +110,7 @@
         $Date = strtotime($year.'-'.$month.'-'.$day);
         $newDate = explode('/',date('n/j/Y', strtotime($n, $Date)));
         return array('year' => intval($newDate[2])
-                    ,'month' => intval($newDate[1])
-                    ,'day' => intval($newDate[0]));
+                    ,'month' => intval($newDate[0])
+                    ,'day' => intval($newDate[1]));
     }
 ?>

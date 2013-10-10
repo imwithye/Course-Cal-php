@@ -6,6 +6,7 @@
     echo '</br><hr>';
     
     echo 'Testing fewDaysNextOrBefore.</br>';
-    $date2 = fewDaysNextOrBefore(array('year'=>2013, 'month'=>12,'day'=>1), '+1 week');
+    $date = array('year'=>2013, 'month'=>12,'day'=>1);
+    $date2 = fewDaysNextOrBefore($date, '+1 days');
     echo $date2['day'].'/'.$date2['month'].'/'.$date2['year'];
 ?>
