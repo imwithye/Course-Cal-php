@@ -1,5 +1,6 @@
 <?php
     require_once 'ical.php';
+    require_once 'libs/phpmailer/class.phpmailer.php';
     $url = $_REQUEST['url'];
     $result = createCal($url);
     if($result==null){
@@ -15,8 +16,9 @@
         if(count($errorWithRepeat)==0)
             $result['ics']->returnCalendar();
         else{
+            foreach($errorWithRepeat as $errorCourse)
+                report($errorCourse->toString().'</br></br>');
             $result['ics']->returnCalendar();
-            //need to be done.
         }
     }
 ?>
