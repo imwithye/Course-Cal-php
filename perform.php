@@ -1,6 +1,6 @@
 <?php
     require_once 'ical.php';
-    require_once 'libs/phpmailer/class.phpmailer.php';
+    require_once 'mail.php';
     $url = $_REQUEST['url'];
     $result = createCal($url);
     if($result==null){
