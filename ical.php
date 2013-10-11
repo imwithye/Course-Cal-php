@@ -15,6 +15,8 @@
             //set summary(name)
             $summary = $course->getCode().' ';
             $summary .= $lesson->getType();
+            if(!$lesson->getWkRepeatValid())
+                $summary .= ' *Warning!';
             $lessonEvent->setProperty( "summary", $summary );
             //set start and end time. 
             $start = fewDaysNextOrBefore($startTime, '+'.($lesson->getTime()->getWkDay()-1).' days');
@@ -38,9 +40,11 @@
             $description .= $course->getName().', ';
             $description .= $course->getAU().'\n';
             if($lesson->getGroup()!=null)
-                $description .= 'Group: '.$lesson->getGroup().', ';
+                $description .= 'Group: '.$lesson->getGroup();
             if($lesson->getRemark()!=null)
-                $description .= 'Remark: '.$lesson->getRemark();
+                $description .= ', Remark: '.$lesson->getRemark();
+            if(!$lesson->getWkRepeatValid())
+                $description .= '\nWarning: Course Cal cannot get the Repeat Information, pls edit by yourself.';
             $lessonEvent->setProperty( "description", $description);
             //set week repeat
             if(!$lesson->getWkRepeatValid())
