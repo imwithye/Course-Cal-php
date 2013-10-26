@@ -14,6 +14,16 @@ Visit [http://ciel.im/course](http://ciel.im/course).
 * Change mail.php to your own settings (works with GAE).
 * Send printable page url to perform.php via post/get request.
 
+## API
+If you don't want to install this app, you may send GET/POST request to [http://course-cal.appspot.com/perform.php](http://course-cal.appspot.com/perform.php). It works as well. More details please visit [here](https://github.com/imwithye/course/blob/gh-pages/index.html).
+
+***Current API Version 1.0.2***
+
+## Change log
+* Remove PHPMailer
+* Works with GAE. app.yml, GAE mail API added
+* Send report automatically
+
 ## Contribute
 * PHP Code - send pull request to master branch
 * Web front - send pull request to gh-pages branch
