@@ -10,13 +10,9 @@ Course Cal can generate calendar which can be imported to Apple iCal, Google Cal
 Visit [http://ciel.im/course](http://ciel.im/course).
 
 ## Usage
-Send printable page url to perform.php via post/get request.
-
-## Options
-You may enable error report with phpmailer following these steps:
-
-1. In perform.php, delete <code>//</code> before <code>foreach</code> and <code>report</code>.
-2. Set up mail.php following comments after each line.
+* Change app.yaml to your own settings (works with GAE).
+* Change mail.php to your own settings (works with GAE).
+* Send printable page url to perform.php via post/get request.
 
 ## Contribute
 * PHP Code - send pull request to master branch

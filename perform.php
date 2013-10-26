@@ -16,8 +16,8 @@
         if(count($errorWithRepeat)==0)
             $result['ics']->returnCalendar();
         else{
-            //foreach($errorWithRepeat as $errorCourse)
-                //report($errorCourse->toString().'</br></br>');
+            foreach($errorWithRepeat as $errorCourse)
+                report($errorCourse->getCode().': '.$errorCourse->getIndex().'<br />');
             $result['ics']->returnCalendar();
         }
     }
