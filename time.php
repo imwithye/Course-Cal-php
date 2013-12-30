@@ -126,5 +126,5 @@
 		return array('year' => intval($newDate[2])
 					,'month' => intval($newDate[0])
 					,'day' => intval($newDate[1]));
-    }
+    }//fewDaysNextOrBefore(array $time, $n);
 ?>
