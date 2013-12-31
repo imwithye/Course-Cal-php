@@ -41,6 +41,10 @@
 			return isset($this->$property_name) ? $this->$property_name : null;
 		}//function __get($property_name);
 		
+		public function setWkRepeatTrueforThisWk($wk){
+			$this->weekRepeat[$wk] = TRUE;
+		}//setWkRepeatTrueforThisWk($wk);
+		
 		public function toString() {
 			$string = "Starting at ".$this->startTime." Ending at ".$this->endTime." on ".$this->wkDay." with Repeat: </br>";
 			foreach ($this->wkRepeat as $wk) {
@@ -95,7 +99,7 @@
 		else if($month=='dec')
 			return 12;
 		else
-			return 0;
+			return $month;
 	}//month($month);
     
 	function week($day) {
@@ -114,7 +118,7 @@
 		else if($day=='sat')
 			return 6;
 		else
-			return 0;
+			return $day;
 	}//week($day);
     
 	function fewDaysNextOrBefore(array $time, $n) {
