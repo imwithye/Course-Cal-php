@@ -43,7 +43,7 @@
 		
 		public function setWkRepeatTrueforThisWk($wk){
 			$this->weekRepeat[$wk] = TRUE;
-		}//setWkRepeatTrueforThisWk($wk);
+		}//function setWkRepeatTrueforThisWk($wk);
 		
 		public function toString() {
 			$string = "Starting at ".$this->startTime." Ending at ".$this->endTime." on ".$this->wkDay." with Repeat: </br>";
@@ -130,5 +130,5 @@
 		return array('year' => intval($newDate[2])
 					,'month' => intval($newDate[0])
 					,'day' => intval($newDate[1]));
-    }//fewDaysNextOrBefore(array $time, $n);
+	}//fewDaysNextOrBefore(array $time, $n);
 ?>
