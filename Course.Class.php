@@ -35,20 +35,21 @@
 			$re1 = preg_replace('/wk/', '', $re);
 			$re2 = preg_replace('/\s/', '', $re1);
 			$wks = explode(',', $re2);
-			$wkTime = explode('-', $wk);
 			foreach($wks as $wk) {
 				$wkTime = explode('-', $wk);
-				if(is_numeric($wk)) {
-					$this->time->setWkRepeatTrueforThisWk($wk-1);
-				}
-				else if(count($wkTime)==2) {
+				if(count($wkTime)==2) {
 					for($i=$wkTime[0]-1;$i<$wkTime[1];$i++)
 						 $this->time->setWkRepeatTrueforThisWk($i);
-				}
+				}//if remark looks like wk1-3,2-5.
+				
+				else if(is_numeric($wk)) {
+					$this->time->setWkRepeatTrueforThisWk($wk-1);
+				}//if remark looks like wk1,2,3
+				
 				else{
 					$this->time->setWkRepeatTrueforThisWk(0);
 					return FALSE;
-				}
+				}//cannot get week repeat information
 			}
 			return TRUE;
 		}//function setWkRepeat();

@@ -8,7 +8,7 @@
 												, 'endTime' => '0930'
 												, 'wkDay' => 'mon'))
 							, 'venue' => 'LT1'
-							, 'remark' => ''));
+							, 'remark' => 'wk2-3,6,8-10'));
 	echo 'Test Case 1: a new lesson created, </br>';
 	echo $lesson->toString().'</br>';
 ?>
