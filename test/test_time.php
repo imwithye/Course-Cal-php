@@ -3,7 +3,7 @@
 	
 	echo 'Test Event Time Class: </br>';
 	$time = array('year' => '1995'
-			, 'month' => '02'
+			, 'month' => 'jan'
 			, 'day' => '28'
 			, 'startTime' => '0830'
 			, 'endTime' => '0930'
@@ -14,10 +14,21 @@
 	
 	echo '</br></br>';
 	echo 'Test Lesson Time Class: </br>';
+	echo 'Case 1: </br>';
 	$time = array(
 			'startTime' => '0830'
 			, 'endTime' => '0930'
 			, 'wkDay' => '01'
+			);
+	$lessonTime = new LessonTime($time);
+	echo 'Year: '.$lessonTime->year.'</br>';
+	echo 'wkDay: '.$lessonTime->wkDay.'</br>';
+	echo $lessonTime->toString();
+	echo 'Case 2: </br>';
+	$time = array(
+			'startTime' => '0830'
+			, 'endTime' => '0930'
+			, 'wkDay' => 'mon'
 			);
 	$lessonTime = new LessonTime($time);
 	echo 'Year: '.$lessonTime->year.'</br>';

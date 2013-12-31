@@ -8,7 +8,7 @@
         
 		public function __construct(array $time) {
 			$this->year = intval($time['year']);
-			$this->month = intval($time['month']);
+			$this->month = intval(month($time['month']));
 			$this->day = intval($time['day']);
 			$this->startTime = intval($time['startTime']);
 			$this->endTime = intval($time['endTime']);
@@ -29,11 +29,11 @@
 		
 		public function __construct(array $time) {
 			$this->year = array_key_exists('year', $time) ? intval($time['year']) : 0;
-			$this->month = array_key_exists('month', $time) ? intval($time['month']) : 0;
+			$this->month = array_key_exists('month', $time) ? intval(month($time['month'])) : 0;
 			$this->day = array_key_exists('day', $time) ? intval($time['day']) : 0;
 			$this->startTime = intval($time['startTime']);
 			$this->endTime = intval($time['endTime']);
-			$this->wkDay = $time['wkDay'];
+			$this->wkDay = intval(week($time['wkDay']));
 			$this->wkRepeat = array(FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE,FALSE);
 		}//function __construct(array $time);
         
