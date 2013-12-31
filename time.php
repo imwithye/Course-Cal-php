@@ -1,5 +1,5 @@
 <?php  
-	class EventTime{
+	class EventTime {
 		protected $year;
 		protected $month;
 		protected $day;
@@ -18,16 +18,16 @@
 			return isset($this->$property_name) ? $this->$property_name : null;
 		}//function __get($property_name);
 		
-		public function toString(){
+		public function toString() {
 			return $this->day.'/'.$this->month.'/'.$this->year.' '.$this->startTime.'-'.$this->endTime;
 		}//function toString();
 	}//class EventTime;
 	
-	class LessonTime extends EventTime{
+	class LessonTime extends EventTime {
 		private $wkDay;
 		private $wkRepeat;
 		
-		public function __construct(array $time){
+		public function __construct(array $time) {
 			$this->year = array_key_exists('year', $time) ? intval($time['year']) : 0;
 			$this->month = array_key_exists('month', $time) ? intval($time['month']) : 0;
 			$this->day = array_key_exists('day', $time) ? intval($time['day']) : 0;
@@ -41,9 +41,9 @@
 			return isset($this->$property_name) ? $this->$property_name : null;
 		}//function __get($property_name);
 		
-		public function toString(){
+		public function toString() {
 			$string = "Starting at ".$this->startTime." Ending at ".$this->endTime." on ".$this->wkDay." with Repeat: </br>";
-			foreach ($this->wkRepeat as $wk){
+			foreach ($this->wkRepeat as $wk) {
 				if($wk)
 					$string .= 'TRUE ';
 				else
@@ -54,7 +54,7 @@
 		}//function toString();
 	}//class LessonTime;
 	
-	function semInfo($year, $sem){
+	function semInfo($year, $sem) {
 		$data = array('2013' => array('1' => 120813
 									,'2' => 130114)
 					, '2014' => array('1' => 110814
@@ -69,7 +69,7 @@
 				, 'day' => intval($SemTime/10000));
 	}//semInfo($year, $sem);
     
-	function month($month){
+	function month($month) {
 		if($month=='jan')
 			return 1;
 		else if($month=='feb')
@@ -98,7 +98,7 @@
 			return 0;
 	}//month($month);
     
-	function week($day){
+	function week($day) {
 		if($day=='sun')
 			return 7;
 		else if($day=='mon')
@@ -117,7 +117,7 @@
 			return 0;
 	}//week($day);
     
-	function fewDaysNextOrBefore(array $time, $n){
+	function fewDaysNextOrBefore(array $time, $n) {
 		$year = array_key_exists('year', $time) ? intval($time['year']) : 0;
 		$month = array_key_exists('month', $time) ? intval($time['month']) : 0;
 		$day = array_key_exists('day', $time) ? intval($time['day']) : 0;
