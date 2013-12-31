@@ -42,7 +42,7 @@
 		}//function __get($property_name);
 		
 		public function setWkRepeatTrueforThisWk($wk){
-			$this->weekRepeat[$wk] = TRUE;
+			$this->wkRepeat[$wk] = TRUE;
 		}//function setWkRepeatTrueforThisWk($wk);
 		
 		public function toString() {

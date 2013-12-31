@@ -31,6 +31,7 @@
 			, 'wkDay' => 'mon'
 			);
 	$lessonTime = new LessonTime($time);
+	$lessonTime->setWkRepeatTrueforThisWk(0);
 	echo 'Year: '.$lessonTime->year.'</br>';
 	echo 'wkDay: '.$lessonTime->wkDay.'</br>';
 	echo $lessonTime->toString();
