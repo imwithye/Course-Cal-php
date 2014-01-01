@@ -103,20 +103,18 @@
         return;
     }
     
-    function createCal($url){
-        $info = getUserInfo($url);
-        if($info==null)
-            return null;
-        $courses = analysePrintablePage($url, $info);
-        if(count($courses)==0)
-            return null;
-        $config = array('unique_id' => $info['p1']
-                    , 'TZID' => $info['tz']
-                    , 'filename' => 'AY'.$info['year'].'-'.($info['year']+1).'-Sem-'.$info['sem']);
-        $ical = new vcalendar($config);
-        foreach($courses as $course){
-            setCourseEvent($course, $ical, $info);
-        }
+	function createCal($url){
+		$info = getUserInfo($info);
+		$courses = Course::getArrayWithPrintablePage($url);
+		if(!courses)
+			return null;
+		$config = array('unique_id' => $info['p1']
+				, 'TZID' => $info['tz']
+				, 'filename' => 'AY'.$info['year'].'-'.($info['year']+1).'-Sem-'.$info['sem']);
+		$ical = new vcalendar($config);
+		foreach($courses as $course){
+			setCourseEvent($course, $ical, $info);
+		}
         return array('ics'=>$ical, 'course'=>$courses);
     }
 ?>

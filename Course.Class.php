@@ -30,6 +30,8 @@
 		
 		public function setCourse(Course $course) {
 			$this->course = $course;
+			if(!$this->wkRepeatValid)
+				$course->addErrorFlag();
 			$this->summary = $course->code.' '.$this->type;
 			if(!$this->wkRepeatValid)
 				$summary .= ' *Warning!';
@@ -117,6 +119,10 @@
 		public function __get($property_name) {
 			return isset($this->$property_name) ? $this->$property_name : null;
 		}//function __get($property_name);
+		
+		public function addErrorFlag() {
+			$this->errorFlag++;
+		}//function addError();
 		
 		public static function getInstanceWithCourseInfo(array $course) {
 			if(!array_key_exists('code', $course))
