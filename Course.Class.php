@@ -119,7 +119,14 @@
 			return new Course($c);
 		}//function getInstanceWithCourseInfo(array $course);
 		
-		public static function getInstanceWithCodeIndexAndInfo($code, $index, array $info) {
+		public static function getInstanceAuto(array $course) {
+			if(!array_key_exists('code', $course) || !array_key_exists('index', $course) || !array_key_exists('year', $course) || !array_key_exists('sem', $course))
+				return null;
+			$code = $course['code'];
+			$index = $course['index'];
+			$examTime = array_key_exists('examTime', $course) ? $course['examTime'] : null;
+			$info = array('year' => $course['year']
+						, 'sem' => $course['sem']);
 			if(!array_key_exists('year', $info) || !array_key_exists('sem', $info))
 				return null;
 			$code = strtoupper($code);
@@ -160,6 +167,7 @@
 							, 'index' => $index
 							, 'name' => $courseName->plaintext
 							, 'au' => $courseAU->plaintext
+							, 'examTime' => $examTime
 							, 'lessons' => array());
 			$trs = array();
 			array_push($trs, $trBlocks[$line]);

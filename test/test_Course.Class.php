@@ -22,8 +22,10 @@
 												, 'lessons' => array($lesson)));
 	echo $course->toString().'</br>';
 	echo 'Test case 2, getInstanceWithCodeIndexAndInfo: </br>';
-	$course = Course::getInstanceWithCodeIndexAndInfo('CZ2001', '10221', array('year' => '2013'
-																			, 'sem' => '1'));
+	$course = Course::getInstanceAuto(array('code' => 'CZ2001'
+										, 'index' => '10221'
+										, 'year' => '2013'
+										, 'sem' => '1'));
 	if(!$course)
 		echo 'cannot create an instance.';
 	else 
