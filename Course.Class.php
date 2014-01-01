@@ -10,6 +10,7 @@
 		private $time;
 		private $venue;
 		private $remark;
+		private $summary;
 		private $wkRepeatValid;
 		
 		public function __construct(array $lesson) {
@@ -28,6 +29,9 @@
 		
 		public function setCourse(Course $course) {
 			$this->course = $course;
+			$this->summary = $course->code.' '.$this->type;
+			if(!$this->wkRepeatValid)
+                $summary .= ' *Warning!';
 		}//function setCourse(Course $course);
 		
 		private function setWkRepeat() {
@@ -66,6 +70,7 @@
 			$string .= '<b>Group:</b> '.$this->group.' ';           
 			$string .= '<b>Venue:</b> '.$this->venue.' ';
 			$string .= '<b>Remark:</b> '.$this->remark.' ';
+			$string .= '<b>Summary:</b> '.$this->summary.' ';
 			if($this->wkRepeatValid) {
 				$string .= '<b>Time:</b> '.$this->time->toString().' ';
 			}
@@ -86,7 +91,7 @@
 		private $errorFlag;
 		
 		private function __construct(array $course) {
-			$this->code = $course['code'];
+			$this->code = strtoupper($course['code']);
 			$this->index = $course['index'];
 			$this->name = ucwords($course['name']);
 			$this->au = $course['au'];
