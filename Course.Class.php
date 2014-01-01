@@ -11,6 +11,7 @@
 		private $venue;
 		private $remark;
 		private $summary;
+		private $description;
 		private $wkRepeatValid;
 		
 		public function __construct(array $lesson) {
@@ -31,7 +32,11 @@
 			$this->course = $course;
 			$this->summary = $course->code.' '.$this->type;
 			if(!$this->wkRepeatValid)
-                $summary .= ' *Warning!';
+				$summary .= ' *Warning!';
+			$this->description = $course->code.' '.$course->name.' '.$course->au.'\n';
+			$this->description .= $this->group!='' ? 'Group: '.$this->group.' ' : '';
+			$this->description .= $this->remark!='' ? 'Remark: '.$this->remark.' ' : '';
+			$this->description .= $this->wkRepeatValid ? '' : '\nWarning: Course Cal cannot get the repeat information. Please edit by yourself.';
 		}//function setCourse(Course $course);
 		
 		private function setWkRepeat() {
@@ -71,6 +76,7 @@
 			$string .= '<b>Venue:</b> '.$this->venue.' ';
 			$string .= '<b>Remark:</b> '.$this->remark.' ';
 			$string .= '<b>Summary:</b> '.$this->summary.' ';
+			$string .= '<b>Description:</b> '.$this->description.' ';
 			if($this->wkRepeatValid) {
 				$string .= '<b>Time:</b> '.$this->time->toString().' ';
 			}
