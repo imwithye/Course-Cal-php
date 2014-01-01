@@ -37,5 +37,4 @@
 	foreach($courses as $course) {
 		echo $course->toString().'</br>';
 	}
-	//echo $courses->toString();
 ?>
