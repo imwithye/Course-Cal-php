@@ -95,7 +95,7 @@
 		return;
 	}//setCourseEvent(Course $course, vcalendar $ical, array $info);
     
-	function createCalWithWithPrintablePage($url) {
+	function createCalWithPrintablePage($url) {
 		$info = getUserInfo($url);
 		$courses = Course::getArrayWithPrintablePage($url);
 		if(!$courses)
@@ -113,5 +113,5 @@
 		return array('ics'=>$ical
 				, 'url'=>$url
 				, 'error' => $error);
-	}//createCalWithWithPrintablePage($url);
+	}//createCalWithPrintablePage($url);
 ?>
