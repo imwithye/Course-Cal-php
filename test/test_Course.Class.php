@@ -14,10 +14,18 @@
 	
 	echo '</br></br>';
 	echo 'Test Course Class: </br>';
+	echo 'Test case 1, getInstanceWithCourseInfo: </br>';
 	$course = Course::getInstanceWithCourseInfo(array('code' => 'CZ2001'
 												, 'index' => '1000'
 												, 'name' => 'Shit Course'
 												, 'au' => '3'
 												, 'lessons' => array($lesson)));
-	echo $course->toString();
+	echo $course->toString().'</br>';
+	echo 'Test case 2, getInstanceWithCodeIndexAndInfo: </br>';
+	$course = Course::getInstanceWithCodeIndexAndInfo('CZ2001', '10221', array('year' => '2013'
+																			, 'sem' => '1'));
+	if(!$course)
+		echo 'cannot create an instance.';
+	else 
+		echo $course->toString();
 ?>

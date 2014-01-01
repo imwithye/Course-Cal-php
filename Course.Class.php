@@ -113,14 +113,83 @@
 			$c = array('code' => $course['code']
 				, 'index' => array_key_exists('index', $course) ? $course['index'] : 0
 				, 'name' => array_key_exists('name', $course) ? $course['name'] : ''
-				, 'au' => array_key_exists('au', $course) ? $course['au'] : 0
+				, 'au' => array_key_exists('au', $course) ? $course['au'] : '0 au'
 				, 'examTime' => array_key_exists('array_key_exists', $course) ? $course['examTime'] : null
 				, 'lessons' => array_key_exists('lessons', $course) ? $course['lessons'] : array());
 			return new Course($c);
 		}//function getInstanceWithCourseInfo(array $course);
 		
-		public static function getInstanceWithCodeAndIndex($code, $index) {
-		}//function getInstanceWithCodeAndIndex($code, $index);
+		public static function getInstanceWithCodeIndexAndInfo($code, $index, array $info) {
+			if(!array_key_exists('year', $info) || !array_key_exists('sem', $info))
+				return null;
+			$code = strtoupper($code);
+			$html = str_get_html(fetch(courseURL($code, $info)));
+			if(!$html)
+				return null;
+			$table = $html->find('table');
+			if(!$table)
+				return null;
+			
+			//get course information
+			$tr = str_get_html($table[0])->find('tr');
+			$InfoBlock = str_get_html($tr[0]);
+			$nameAndAuBlock = $InfoBlock->find('b');
+			$courseName = $nameAndAuBlock[1]->plaintext;
+			$courseAU = $nameAndAuBlock[2]->plaintext;
+			
+			//get index block
+			$indexBlock = null;
+			$line = -1;
+			$trBlocks = str_get_html($table[1])->find('tr');
+			for($i=0;$i<count($trBlocks);$i++) {
+				$cols = str_get_html ($trBlocks[$i])->find('b');
+				for($j=0;$j<count($cols);$j++)
+					if($index==$cols[0]->plaintext) {
+						$indexBlock = $trBlocks[$i];
+						$line = $i;
+						break;
+					}
+				if($line!=-1)
+					break;
+			}
+			if($line==-1)
+				return null;
+			
+			//create a course instance
+			$c = array('code' => $code
+							, 'index' => $index
+							, 'name' => $courseName->plaintext
+							, 'au' => $courseAU->plaintext
+							, 'lessons' => array());
+			$trs = array();
+			array_push($trs, $trBlocks[$line]);
+			$line++;
+			$firstTrArray = str_get_html($trBlocks[$line])->find('b');
+			$firstTr = $firstTrArray[0]->plaintext;
+			while($line<count($trBlocks) && $firstTr=="") {
+				array_push($trs, $trBlocks[$line]);
+				$line++;
+				$firstTrArray = str_get_html($trBlocks[$line])->find('b');
+				$firstTr = $firstTrArray[0]->plaintext;
+			}
+			foreach ($trs as $value) {
+				$lessonInfo = str_get_html($value)->find('b');
+				if(!$lessonInfo)
+					return null;
+				$times = explode('-',$lessonInfo[4]->plaintext);
+				if(!$times)
+					return null;
+				$lesson = new Lesson(array('type' => $lessonInfo[1]->plaintext
+										, 'group' => $lessonInfo[2]->plaintext
+										, 'time' => new LessonTime(array('wkDay' => $lessonInfo[3]->plaintext
+																	, 'startTime' => intval($times[0])
+																	, 'endTime' => intval($times[1])))
+										, 'venue' => $lessonInfo[5]->plaintext
+										, 'remark' => $lessonInfo[6]->plaintext));
+				array_push($c['lessons'], $lesson);
+			}
+			return new Course($c);
+		}//function getInstanceWithCodeIndexAndInfo($code, $index, array $info);
 		
 		public function toString(){
 			$string = 'Course, ';
