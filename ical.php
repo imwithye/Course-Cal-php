@@ -112,9 +112,14 @@
 				, 'TZID' => $info['tz']
 				, 'filename' => 'AY'.$info['year'].'-'.($info['year']+1).'-Sem-'.$info['sem']);
 		$ical = new vcalendar($config);
+		$error = FALSE;
 		foreach($courses as $course){
+			if($course->errorFlag>0)
+				$error = TRUE;
 			setCourseEvent($course, $ical, $info);
 		}
-        return array('ics'=>$ical, 'course'=>$courses);
-    }
+		return array('ics'=>$ical
+				, 'url'=>$url,
+				, 'error' => $error);
+	}
 ?>
