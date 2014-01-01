@@ -224,7 +224,7 @@
 			if(!$info)
 				return null;
 			$html = str_get_html(fetch($url));
-			if(!html)
+			if(!$html)
 				return null;
 			$courses = array();
 			$outTables = $html->find('table');
