@@ -4,6 +4,7 @@
 	require_once 'libs/simple_html_dom.php';
 	
 	class Lesson {
+		private $course;
 		private $type;
 		private $group;
 		private $time;
@@ -12,6 +13,7 @@
 		private $wkRepeatValid;
 		
 		public function __construct(array $lesson) {
+			$this->course = array_key_exists('course', $lesson) ? $lesson['course'] : null;
 			$this->type = array_key_exists('type', $lesson) ? strtoupper($lesson['type']) : '';
 			$this->group = array_key_exists('group', $lesson) ? strtoupper($lesson['group']) : '';
 			$this->time = array_key_exists('time', $lesson) ? $lesson['time'] : null;
@@ -23,6 +25,10 @@
 		public function __get($property_name) {
 			return isset($this->$property_name) ? $this->$property_name : null;
 		}//function __get($property_name);
+		
+		public function setCourse(Course $course) {
+			$this->course = $course;
+		}//function setCourse(Course $course);
 		
 		private function setWkRepeat() {
 			$re = strtolower($this->remark);
@@ -68,5 +74,65 @@
 			}
 			return $string;
 		}//function toString();
-	}//class Lesson
+	}//class Lesson;
+	
+	class Course {
+		private $code;
+		private $index;
+		private $name;
+		private $au;
+		private $examTime;
+		private $lessons;
+		private $errorFlag;
+		
+		private function __construct(array $course) {
+			$this->code = $course['code'];
+			$this->index = $course['index'];
+			$this->name = $course['name'];
+			$this->au = $course['au'];
+			$this->examTime = $course['examTime'];
+			$this->lessons = array();
+			foreach($course['lessons'] as $l) {
+				$this->addLesson($l);
+			}
+			$this->errorFlag = 0;
+		}//function __construct(array $course);
+		
+		private function addLesson(Lesson $lesson) {
+			array_push($this->lessons, $lesson);
+			$lesson->setCourse($this);
+		}//addLesson(Lesson $lesson);
+		
+		public function __get($property_name) {
+			return isset($this->$property_name) ? $this->$property_name : null;
+		}//function __get($property_name);
+		
+		public static function getInstanceWithCourseInfo(array $course) {
+			if(!array_key_exists('code', $course))
+				return null;
+			$c = array('code' => $course['code']
+				, 'index' => array_key_exists('index', $course) ? $course['index'] : 0
+				, 'name' => array_key_exists('name', $course) ? $course['name'] : ''
+				, 'au' => array_key_exists('au', $course) ? $course['au'] : 0
+				, 'examTime' => array_key_exists('array_key_exists', $course) ? $course['examTime'] : null
+				, 'lessons' => array_key_exists('lessons', $course) ? $course['lessons'] : array());
+			return new Course($c);
+		}//function getInstanceWithCourseInfo(array $course);
+		
+		public static function getInstanceWithCodeAndIndex($code, $index) {
+		}//function getInstanceWithCodeAndIndex($code, $index);
+		
+		public function toString(){
+			$string = 'Course, ';
+			$string .= $this->name.' ';
+			$string .= 'Code: '.$this->code.' ';
+			$string .= 'Index: '.$this->index.' ';
+			$string .= 'AU: '.$this->au.' ';
+			$string .= $examTime ? $examTime->toString() : 'No exam time ';
+			$string .= 'Lessons: </br>';
+			foreach($this->lessons as $lesson)
+				$string .= $lesson->toString();
+			return $string;
+		}//function toString();
+	}//class Course;
 ?>
