@@ -34,7 +34,10 @@
 		echo $course->toString();
 	echo 'Test case 3, getArrayWithPrintablePage: </br>';
 	$courses = Course::getArrayWithPrintablePage($url);
-	foreach($courses as $course) {
-		echo $course->toString().'</br>';
-	}
+	if(!$courses)
+		echo 'wrong';
+	else
+		foreach($courses as $course) {
+			echo $course->toString().'</br>';
+		}
 ?>

@@ -215,6 +215,8 @@
 		
 		public static function getArrayWithPrintablePage($url) {
 			$info = getUserInfo($url);
+			if(!$info)
+				return null;
 			$html = str_get_html(fetch($url));
 			if(!html)
 				return null;
