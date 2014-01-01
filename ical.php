@@ -110,8 +110,46 @@
 				$error = TRUE;
 			setCourseEvent($course, $ical, $info);
 		}
-		return array('ics'=>$ical
-				, 'url'=>$url
+		return array('ics' => $ical
+				, 'url' => $url
 				, 'error' => $error);
 	}//createCalWithPrintablePage($url);
+	
+	function createCalWithCustomInformation(array $info) {
+		//check important value
+		if(!array_key_exists('year', $info) || !array_key_exists('sem', $info) || !array_key_exists('courses', $info))
+			return null;
+		
+		$mode = array_key_exists('mode', $info) ? $info['mode'] : 'auto';
+		$unique_id = array_key_exists('unique_id', $info) ? $info['unique_id'] : rand();
+		$TZID = array_key_exists('tz', $info) ? $info['tz'] : 'Asia/Singapore';
+		$filename = array_key_exists('filename', $info) ? $info['filename'] : 'Course_Cal_file';
+		$year = $info['year'];
+		$sem = $info['sem'];
+		$courses = $info['courses'];
+		if(!is_numeric($year) || !is_numeric($sem))
+			return null;
+		
+		//create ical
+		$config = array('unique_id' => $unique_id
+					, 'TZID' => $TZID
+					, 'filename' => $filename);
+		$ical = new vcalendar($config);
+		
+		//add courses
+		foreach($courses as $course) {
+			$c = null;
+			if($mode=='manual') {
+				$c = Course::getInstanceWithCourseInfo($course);
+			}
+			else {
+				$course['year'] = $info['year'];
+				$course['sem'] = $info['sem'];
+				$c = Course::getInstanceAuto($course);
+			}
+			if($c)
+				setCourseEvent($c, $ical, $info);
+		}
+		return array('ics' => $ical);
+	}//createCalWithCustomInformation(array $info);
 ?>
