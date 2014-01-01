@@ -88,7 +88,7 @@
 		private function __construct(array $course) {
 			$this->code = $course['code'];
 			$this->index = $course['index'];
-			$this->name = $course['name'];
+			$this->name = ucwords($course['name']);
 			$this->au = $course['au'];
 			$this->examTime = $course['examTime'];
 			$this->lessons = array();
@@ -114,7 +114,7 @@
 				, 'index' => array_key_exists('index', $course) ? $course['index'] : 0
 				, 'name' => array_key_exists('name', $course) ? $course['name'] : ''
 				, 'au' => array_key_exists('au', $course) ? $course['au'] : '0 au'
-				, 'examTime' => array_key_exists('array_key_exists', $course) ? $course['examTime'] : null
+				, 'examTime' => array_key_exists('examTime', $course) ? $course['examTime'] : null
 				, 'lessons' => array_key_exists('lessons', $course) ? $course['lessons'] : array());
 			return new Course($c);
 		}//function getInstanceWithCourseInfo(array $course);
@@ -123,13 +123,14 @@
 			if(!array_key_exists('code', $course) || !array_key_exists('index', $course) || !array_key_exists('year', $course) || !array_key_exists('sem', $course))
 				return null;
 			$code = $course['code'];
+			$code = strtoupper($code);
 			$index = $course['index'];
 			$examTime = array_key_exists('examTime', $course) ? $course['examTime'] : null;
 			$info = array('year' => $course['year']
 						, 'sem' => $course['sem']);
 			if(!array_key_exists('year', $info) || !array_key_exists('sem', $info))
 				return null;
-			$code = strtoupper($code);
+			
 			$html = str_get_html(fetch(courseURL($code, $info)));
 			if(!$html)
 				return null;
@@ -164,21 +165,23 @@
 			
 			//create a course instance
 			$c = array('code' => $code
-							, 'index' => $index
-							, 'name' => $courseName->plaintext
-							, 'au' => $courseAU->plaintext
-							, 'examTime' => $examTime
-							, 'lessons' => array());
+					, 'index' => $index
+					, 'name' => $courseName
+					, 'au' => $courseAU
+					, 'examTime' => $examTime
+					, 'lessons' => array());
 			$trs = array();
 			array_push($trs, $trBlocks[$line]);
 			$line++;
-			$firstTrArray = str_get_html($trBlocks[$line])->find('b');
-			$firstTr = $firstTrArray[0]->plaintext;
-			while($line<count($trBlocks) && $firstTr=="") {
+			while(TRUE) {
+				if($line>=count($trBlocks))
+					break;
+				$cols = str_get_html($trBlocks[$line])->find('b');
+				$first = $cols[0]->plaintext;
+				if($first!='')
+					break;
 				array_push($trs, $trBlocks[$line]);
 				$line++;
-				$firstTrArray = str_get_html($trBlocks[$line])->find('b');
-				$firstTr = $firstTrArray[0]->plaintext;
 			}
 			foreach ($trs as $value) {
 				$lessonInfo = str_get_html($value)->find('b');
@@ -196,8 +199,49 @@
 										, 'remark' => $lessonInfo[6]->plaintext));
 				array_push($c['lessons'], $lesson);
 			}
-			return new Course($c);
+			return Course::getInstanceWithCourseInfo($c);
 		}//function getInstanceWithCodeIndexAndInfo($code, $index, array $info);
+		
+		public static function getArrayWithPrintablePage($url) {
+			$info = getUserInfo($url);
+			$html = str_get_html(fetch($url));
+			if(!html)
+				return null;
+			$courses = array();
+			$outTables = $html->find('table');
+			if(!$outTables)
+				return null;
+			$innerTable = str_get_html($outTables[0])->find('table');
+			if(!$innerTable)
+				return null;
+			$table = str_get_html($innerTable[2]);
+			$trBlocks = $table->find('tr');
+			$numbersOfBlocks = count($trBlocks);
+			for($i=1;$i<$numbersOfBlocks-1;$i++) {
+				$tds = str_get_html($trBlocks[$i])->find('td');
+				$code = $tds[1]->plaintext;
+				$index = $tds[0]->plaintext;
+				$examTime = null;
+				if(preg_replace('/\s/', '', $tds[4]->plaintext)!='-') {
+					$examSchedule = explode(' ', $tds[4]->plaintext);
+					$first = explode('-', $examSchedule[0]);
+					$second = explode('-', $examSchedule[1]);
+					$examTime = new EventTime(array('year' => '20'.$first[2]
+												, 'month' => $first[1]
+												, 'day' => $first[0]
+												, 'startTime' => $second[0]
+												, 'endTime' => $second[1]));
+				}
+				$course = Course::getInstanceAuto(array('code' => $code
+													, 'index' => $index
+													, 'year' => $info['year']
+													, 'sem' => $info['sem']
+													, 'examTime' => $examTime));
+				if($course)
+					array_push($courses, $course);
+			}
+			return $courses;
+		}//function getArrayWithUrl($url);
 		
 		public function toString(){
 			$string = 'Course, ';
@@ -205,7 +249,7 @@
 			$string .= 'Code: '.$this->code.' ';
 			$string .= 'Index: '.$this->index.' ';
 			$string .= 'AU: '.$this->au.' ';
-			$string .= $examTime ? $examTime->toString() : 'No exam time ';
+			$string .= $this->examTime ? $this->examTime->toString() : 'No exam time ';
 			$string .= 'Lessons: </br>';
 			foreach($this->lessons as $lesson)
 				$string .= $lesson->toString();

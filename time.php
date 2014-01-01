@@ -74,6 +74,7 @@
 	}//semInfo($year, $sem);
     
 	function month($month) {
+		$month = strtolower($month);
 		if($month=='jan')
 			return 1;
 		else if($month=='feb')
@@ -103,6 +104,7 @@
 	}//month($month);
     
 	function week($day) {
+		$day = strtolower($day);
 		if($day=='sun')
 			return 7;
 		else if($day=='mon')
