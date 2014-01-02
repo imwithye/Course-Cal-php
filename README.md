@@ -119,12 +119,13 @@ var json_manual_mode  = '{
 			4. `venue`: **optional, set to '' by default**.
 			5. `remark`: **optional, set to 'Invalid' by default**. `remark` is used to get week repeat information (jump recess week automatically). If `remark` is '', this lesson will repeat every week. `remark` accept these kinds of syntax: `wk2-13`, `wk2,3,4,5`, `wk2-4,6,8,9-10`.
 
-***Current API Version 1.0.2***
+***Current API Version 1.1.1***
+
+***Last stable API Version 1.0.2***
 
 ## Change log
-* Remove PHPMailer
-* Works with GAE. app.yml, GAE mail API added
-* Send report automatically
+* Reorganize all codes.
+* JSON support.
 
 ## Contribute
 * PHP Code - send pull request to master branch
