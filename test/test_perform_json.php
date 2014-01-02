@@ -9,7 +9,14 @@
 			"courses" : [
 					{
 						"code" : "CZ2006",
-						"index" : "10271"
+						"index" : "10271",
+						"examTime" : {
+							"year" : "2014",
+							"month" : "jan",
+							"day" : "1",
+							"startTime" : "0800",
+							"endTime" : "0900"
+							}
 					},
 					{
 						"code" : "CZ2007",
@@ -61,7 +68,7 @@
 			<script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 			<script>
 				function submit_json(form) {
-					var data = '.$json_manual_mode.';
+					var data = '.$json_auto_mode.';
 					var json_string = JSON.stringify(data);
 					$("#txt_json").val(json_string);
 					form.submit();
