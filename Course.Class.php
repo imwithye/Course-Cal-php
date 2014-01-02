@@ -18,7 +18,7 @@
 			$this->course = array_key_exists('course', $lesson) ? $lesson['course'] : null;
 			$this->type = array_key_exists('type', $lesson) ? strtoupper($lesson['type']) : '';
 			$this->group = array_key_exists('group', $lesson) ? strtoupper($lesson['group']) : '';
-			$this->time = array_key_exists('time', $lesson) ? $lesson['time'] : null;
+			$this->time = array_key_exists('time', $lesson) ? (is_array($lesson['time']) ? new LessonTime($lesson['time']) : $lesson['time']) : null;
 			$this->venue = array_key_exists('venue', $lesson) ? strtoupper($lesson['venue']) : '';
 			$this->remark = array_key_exists('remark', $lesson) ? $lesson['remark'] : 'Invalid';
 			$this->wkRepeatValid = $this->setWkRepeat();
@@ -106,7 +106,10 @@
 			$this->examTime = $course['examTime'];
 			$this->lessons = array();
 			foreach($course['lessons'] as $l) {
-				$this->addLesson($l);
+				if(is_array($l))
+					$this->addNewLesson($l);
+				else
+					$this->addLesson($l);
 			}
 			$this->errorFlag = 0;
 		}//function __construct(array $course);
@@ -114,7 +117,15 @@
 		private function addLesson(Lesson $lesson) {
 			array_push($this->lessons, $lesson);
 			$lesson->setCourse($this);
-		}//addLesson(Lesson $lesson);
+		}//function addLesson(Lesson $lesson);
+		
+		private function addNewLesson(array $lesson) {
+			$l = new Lesson($lesson);
+			if($l) {
+				array_push($this->lessons, $l);
+				$l->setCourse($this);
+			}
+		}//function addLesson(array $lesson);
 		
 		public function __get($property_name) {
 			return isset($this->$property_name) ? $this->$property_name : null;
@@ -131,7 +142,7 @@
 				, 'index' => array_key_exists('index', $course) ? $course['index'] : 0
 				, 'name' => array_key_exists('name', $course) ? $course['name'] : ''
 				, 'au' => array_key_exists('au', $course) ? $course['au'] : '0 au'
-				, 'examTime' => array_key_exists('examTime', $course) ? $course['examTime'] : null
+				, 'examTime' => array_key_exists('examTime', $course) ? (is_array($course['examTime']) ? new EventTime($course['examTime']) : $course['examTime']) : null
 				, 'lessons' => array_key_exists('lessons', $course) ? $course['lessons'] : array());
 			return new Course($c);
 		}//function getInstanceWithCourseInfo(array $course);
