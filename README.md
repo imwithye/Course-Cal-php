@@ -20,7 +20,7 @@ Visit [http://ciel.im/course](http://ciel.im/course).
 If you don't want to install this app, you may send GET/POST request to [http://course-cal.appspot.com/perform.php](http://course-cal.appspot.com/perform.php). It works as well. More details please visit [here](https://github.com/imwithye/course/blob/gh-pages/index.html).
 
 ###JSON
-You can create Course Cal by yourself with JSON. There are two modes - auto or manual.
+You can create Course Cal by yourself with JSON. You shold post the JSON string as `txt_json`. An example is [here](https://github.com/imwithye/course/blob/master/test/test_perform_json.php). There are two modes - auto or manual.
 
 **Auto mode**. Course Cal can create event automatically with course code and index (may slower than manual mode).
 
