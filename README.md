@@ -26,7 +26,7 @@ You can create Course Cal by yourself with JSON. There are two modes - auto or m
 
 **Manual mode**. Course Cal can create event automatically with course information (need more information than auto mode).
 
-```JSON
+```JavaScript
 var json_auto_mode = '{
 			"mode" : "auto",
 			"unique_id" : "auto_mode",
