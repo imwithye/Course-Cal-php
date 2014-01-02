@@ -1,24 +1,16 @@
 <?php
-    require_once 'ical.php';
-    require_once 'mail.php';
-    $url = $_REQUEST['url'];
-    $result = createCal($url);
-    if($result==null){
-        echo 'Error!';
-    }
-    else{
-        $courses = $result['course'];
-        $errorWithRepeat = array();
-        foreach($courses as $course){
-            if($course->getErrorFlag()!=0)
-                array_push ($errorWithRepeat, $course);
-        }
-        if(count($errorWithRepeat)==0)
-            $result['ics']->returnCalendar();
-        else{
-            foreach($errorWithRepeat as $errorCourse)
-                report($errorCourse->getCode().': '.$errorCourse->getIndex().'<br />');
-            $result['ics']->returnCalendar();
-        }
-    }
+	require_once 'ical.php';
+	require_once 'mail.php';
+	
+	$url = array_key_exists('url', $_REQUEST) ? $_REQUEST['url'] : null;
+	$result = createCalWithPrintablePage($url);
+	if(!$result) {
+		echo 'Error!';
+	}
+	else{
+		if($result['error']) {
+			report('Error is caught in this url: '.$result['url']); //report error
+		}
+		$result['ics']->returnCalendar();
+	}
 ?>
