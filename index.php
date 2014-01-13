@@ -24,6 +24,7 @@
     
     <form method="POST" action="/perform.php">
         <input type="text" id="url" name="url" placeholder=" Printable page url"; autocomplete="off" style="border:1px solid #006699;"/>
+        <input type="hidden" name="json" id="json" value="">
         <br />
         <br />
         <input type="submit" id="submit" value="Generate"/>

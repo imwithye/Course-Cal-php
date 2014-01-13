@@ -70,14 +70,14 @@
 				function submit_json(form) {
 					var data = '.$json_auto_mode.';
 					var json_string = JSON.stringify(data);
-					$("#txt_json").val(json_string);
+					$("#json").val(json_string);
 					form.submit();
 				}
 			</script>
 		</head>
 		<body>
-			<form action="../perform_json.php" method="post" onsubmit="submit_json(this)">
-				<input name="txt_json" id="txt_json" hidden></input>
+			<form action="../perform.php" method="post" onsubmit="submit_json(this)">
+				<input name="json" id="json" hidden></input>
 				<input type="submit"></input>
 			</form>
 		</body>

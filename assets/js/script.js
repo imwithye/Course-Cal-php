@@ -15,6 +15,14 @@ $(function(){
        } 
     });
     
+    $('input#submit').click(function(){
+        var json = {'url': $('input#url').val()};
+        var element = document.getElementById("json");
+        element.value = JSON.stringify(json);
+        alert(element.value);
+        element.form.submit();
+    });
+    
    function stopRKey(evt) { 
         var evt = (evt) ? evt : ((event) ? event : null); 
         var node = (evt.target) ? evt.target : ((evt.srcElement) ? evt.srcElement : null); 

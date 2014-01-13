@@ -1,5 +1,6 @@
 <?php
 	function getUserInfo($url){
+		$url = urldecode($url);
 		$matches = array();
 		
 		preg_match('/(?<=\?p1=NTU_)\w+(?=&)/', $url, $matches);
