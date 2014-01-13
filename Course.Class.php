@@ -15,7 +15,7 @@
 		private $wkRepeatValid;
 		
 		public function __construct(array $lesson) {
-			$this->course = array_key_exists('course', $lesson) ? $lesson['course'] : null;
+			$this->course = array_key_exists('course', $lesson) ? $this->setCourse($lesson['course']) : null;
 			$this->type = array_key_exists('type', $lesson) ? strtoupper($lesson['type']) : '';
 			$this->group = array_key_exists('group', $lesson) ? strtoupper($lesson['group']) : '';
 			$this->time = array_key_exists('time', $lesson) ? (is_array($lesson['time']) ? new LessonTime($lesson['time']) : $lesson['time']) : null;
@@ -133,7 +133,7 @@
 		
 		public function addErrorFlag() {
 			$this->errorFlag++;
-		}//function addError();
+		}//function addErrorFlag();
 		
 		public static function getInstanceWithCourseInfo(array $course) {
 			if(!array_key_exists('code', $course))

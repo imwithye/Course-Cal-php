@@ -6,7 +6,7 @@
 		$mail_options = array('sender' => 'imwithye.report@gmail.com'
 						, 'to' => 'imwithye@gmail.com'
 						, 'subject' => 'Course Cal Report'
-						, 'textBody' => $body);
+						, 'textBody' => $body);	//change to your own emails.
 		
 		try {
 			$message = new Message($mail_options);
