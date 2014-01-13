@@ -11,25 +11,47 @@ Course Cal can generate calendar which can be imported to Apple iCal, Google Cal
 ## Demo
 Visit [http://ciel.im/course](http://ciel.im/course).
 
-## Usage
+## Host by yourself
 * Change app.yaml to your own settings (works with GAE).
 * Change mail.php to your own settings (works with GAE).
 * Send printable page url to perform.php via post/get request.
 
+You can host it with any php server, but mail.php can only work with GAE.
+
 ## API
 
-###By Printable Page url
-If you don't want to install this app, you may send GET/POST request to [http://course-cal.appspot.com/perform.php](http://course-cal.appspot.com/perform.php). It works as well. More details please visit [here](https://github.com/imwithye/course/blob/gh-pages/index.html).
+### By Printable Page url
+You may send GET/POST request to  `perform.php`(You can also send post request to [http://course-cal.appspot.com/perform.php](http://course-cal.appspot.com/perform.php)). `perform.php` get JSON string from `json`: 
 
-###JSON
-You can create Course Cal by yourself with JSON. You shold post the JSON string as `txt_json`. An example is [here](https://github.com/imwithye/course/blob/master/test/test_perform_json.php). There are two modes - auto or manual.
+```PHP
+$json_data = array_key_exists('json', $_REQUEST) ? $_REQUEST['json'] : null;
+```
+So you may have a hidden input named `json`, and use it to send data.
+
+```HTML
+<input type="hidden" name="json" id="json" value="">
+```
+
+Submit by
+
+```JavaScript
+$('input#submit').click(function(){
+        var json = {'url': $('input#url').val()};
+        var element = document.getElementById("json");
+        element.value = JSON.stringify(json);
+        element.form.submit();
+});
+```
+
+### JSON
+You can create Course Cal by yourself with JSON. You shold post the JSON string as `json` as well. An example is [here](https://github.com/imwithye/course/blob/master/test/test_perform_json.php). You can send JSON string using the same method with printable page url. **Note that if there is `url` in JSON string, all other things will be ignored**. There are two modes - auto or manual.
 
 **Auto mode**. Course Cal can create event automatically with course code and index (may slower than manual mode).
 
 **Manual mode**. Course Cal can create event automatically with course information (need more information than auto mode).
 
 ```JavaScript
-var json_auto_mode = '{
+var json_auto_mode = {
 			"mode" : "auto",
 			"unique_id" : "auto_mode",
 			"tz" : "Asia/Singapore",
@@ -53,9 +75,9 @@ var json_auto_mode = '{
 						"index" : "10281"
 					}
 				]
-		}';
+		};
 
-var json_manual_mode  = '{
+var json_manual_mode  = {
 			"mode" : "manual",
 			"unique_id" : "manual_mode",
 			"tz" : "Asia/Singapore",
@@ -90,7 +112,7 @@ var json_manual_mode  = '{
 							]
 					}
 				]
-		}';
+		};
 ```
 
 1. `mode`: **optional, set to `auto` by default**.
@@ -121,14 +143,12 @@ var json_manual_mode  = '{
 			4. `venue`: **optional, set to '' by default**.
 			5. `remark`: **optional, set to 'Invalid' by default**. `remark` is used to get week repeat information (jump recess week automatically). If `remark` is '', this lesson will repeat every week. `remark` accept these kinds of syntax: `wk2-13`, `wk2,3,4,5`, `wk2-4,6,8,9-10`.
 
-***Current API Version 1.1.1***
+***Current API Version 1.1.2***
 
-***Last stable API Version 1.0.2***
+***Last stable API Version 1.1.2***
 
 ## Change log
-* Reorganize all codes.
-* JSON support.
+* API changes
 
 ## Contribute
 * PHP Code - send pull request to master branch
-* Web front - send pull request to gh-pages branch
