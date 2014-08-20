@@ -1,37 +1,4 @@
 <?php
-	function getUserInfo($url){
-		$url = urldecode($url);
-		$matches = array();
-		
-		preg_match('/(?<=\?p1=NTU_)\w+(?=&)/', $url, $matches);
-		if(count($matches)!=1)
-			return null;
-		$p1 = $matches[0];
-		
-		preg_match('/(?<=&p2=)\w+(?=&)/', $url, $matches);
-		if(count($matches)!=1)
-			return null;
-		$p2 = $matches[0];
-		
-		preg_match('/(?<=&acad=)\d+(?=&)/', $url, $matches);
-		if(count($matches)!=1)
-			return null;
-		$year = $matches[0];
-		
-		preg_match('/(?<=&semester=)\d(?=&)/', $url, $matches);
-		if(count($matches)!=1)
-			return null;
-		$sem = $matches[0];
-		
-		$info = array('url' => urldecode($url)
-					, 'p1' => $p1
-					, 'p2' => $p2
-					, 'year' => $year
-					, 'sem' => $sem
-					, 'tz' => 'Asia/Singapore');
-		return $info;
-	}//getUserInfo($url);
-	
 	function courseURL($code, array $info){
 		$y = $info['year'];
 		$sem = $info['sem'];

@@ -230,49 +230,6 @@
 			return Course::getInstanceWithCourseInfo($c);
 		}//function getInstanceWithCodeIndexAndInfo($code, $index, array $info);
 		
-		public static function getArrayWithPrintablePage($url) {
-			$info = getUserInfo($url);
-			if(!$info)
-				return null;
-			$html = str_get_html(fetch($url));
-			if(!$html)
-				return null;
-			$courses = array();
-			$outTables = $html->find('table');
-			if(!$outTables)
-				return null;
-			$innerTable = str_get_html($outTables[0])->find('table');
-			if(!$innerTable)
-				return null;
-			$table = str_get_html($innerTable[2]);
-			$trBlocks = $table->find('tr');
-			$numbersOfBlocks = count($trBlocks);
-			for($i=1;$i<$numbersOfBlocks-1;$i++) {
-				$tds = str_get_html($trBlocks[$i])->find('td');
-				$code = $tds[1]->plaintext;
-				$index = $tds[0]->plaintext;
-				$examTime = null;
-				if(preg_replace('/\s/', '', $tds[4]->plaintext)!='-') {
-					$examSchedule = explode(' ', $tds[4]->plaintext);
-					$first = explode('-', $examSchedule[0]);
-					$second = explode('-', $examSchedule[1]);
-					$examTime = new EventTime(array('year' => '20'.$first[2]
-												, 'month' => $first[1]
-												, 'day' => $first[0]
-												, 'startTime' => $second[0]
-												, 'endTime' => $second[1]));
-				}
-				$course = Course::getInstanceAuto(array('code' => $code
-													, 'index' => $index
-													, 'year' => $info['year']
-													, 'sem' => $info['sem']
-													, 'examTime' => $examTime));
-				if($course)
-					array_push($courses, $course);
-			}
-			return $courses;
-		}//function getArrayWithUrl($url);
-		
 		public function toString(){
 			$string = 'Course, ';
 			$string .= $this->name.' ';

@@ -94,26 +94,6 @@
 		$exam->setProperty( 'description', $course->code.', '.$course->name.', '.$course->au);
 		return;
 	}//setCourseEvent(Course $course, vcalendar $ical, array $info);
-    
-	function createCalWithPrintablePage($url) {
-		$info = getUserInfo($url);
-		$courses = Course::getArrayWithPrintablePage($url);
-		if(!$courses)
-			return null;
-		$config = array('unique_id' => $info['p1']
-				, 'TZID' => $info['tz']
-				, 'filename' => 'AY'.$info['year'].'-'.($info['year']+1).'-Sem-'.$info['sem']);
-		$ical = new vcalendar($config);
-		$error = FALSE;
-		foreach($courses as $course){
-			if($course->errorFlag>0)
-				$error = TRUE;
-			setCourseEvent($course, $ical, $info);
-		}
-		return array('ics' => $ical
-				, 'url' => $url
-				, 'error' => $error);
-	}//createCalWithPrintablePage($url);
 	
 	function createCalWithCustomInformation(array $info) {
 		//check important value
