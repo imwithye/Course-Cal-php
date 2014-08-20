@@ -7,3 +7,6 @@ threadsafe: yes
 handlers:
 - url: /(.+)
   script: \1
+
+- url: /
+  script: index.php
