@@ -1,6 +1,8 @@
 Course Cal in PHP
 ======
 
+### This repo is no longer maintained. Visit [https://github.com/imwithye/NTUSTARS](https://github.com/imwithye/NTUSTARS) to get more information.
+
 Check the Chrome extension, [http://bit.ly/course-cal](http://bit.ly/course-cal)
 
 ***<font color="red">Developing tree is master. You don't have to hack master tree normally. Please download [release version](https://github.com/imwithye/course/releases) if you want to host Course Cal yourself.</font>***
